@@ -48,4 +48,18 @@ The purpose here is to have a wysiwyg rich text editor component with a material
 
 You can use any npm package you want (like [slatejs](https://www.slatejs.org/#/rich-text) or maybe [react-mde](https://github.com/andrerpena/react-mde))
 
+### 3 - Add comments and likes on posts
+
+We want to be able to add comments and like on each post.
+
+The user that comment will have to put his name and a message in the comment form. 
+
+These informations will be stored in DB using mongoose.
+
+The comment button has to be on the post list and the list of comments has to be on the post page.
+
+For the likes (anonymous) we will have a counter beside the like button to display the number of likes ( stored in DB ).
+
+*Note that we don't have connected users so this test is more to see how you implement the logic*
+
 Good luck :)
