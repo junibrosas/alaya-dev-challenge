@@ -50,7 +50,7 @@ You can use any npm package you want (like [slatejs](https://www.slatejs.org/#/r
 
 ### 3 - Add comments and likes on posts
 
-We want to be able to add a comment and a like button on each post.
+We want to be able to make a comment and to like each post.
 
 The user that comments will have to put an author name and a message in the comment form. 
 
