@@ -39,6 +39,16 @@
   color: #EF5350;
 }
 
+.post-action ul {
+  padding-top: 5px;
+  list-style: none;
+}
+
+.post-action li{
+  padding-right: 10px;
+  display: inline;
+}
+
 .divider{
   border: 0;
   height: 1px;

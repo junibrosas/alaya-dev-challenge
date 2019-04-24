@@ -3,15 +3,17 @@ import * as PostController from '../controllers/post.controller';
 const router = new Router();
 
 // Get all Posts
-router.route('/posts').get(PostController.getPosts);
+router.get('/', PostController.getPosts);
 
 // Get one post by cuid
-router.route('/posts/:cuid').get(PostController.getPost);
+router.get('/:cuid', PostController.getPost);
 
 // Add a new Post
-router.route('/posts').post(PostController.addPost);
+router.post('/', PostController.addPost);
 
 // Delete a post by cuid
-router.route('/posts/:cuid').delete(PostController.deletePost);
+router.delete('/:cuid', PostController.deletePost);
+
+export { router as PostRoutes };
 
 export default router;

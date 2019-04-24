@@ -16,8 +16,17 @@ function PostListItem(props) {
         </Link>
       </h3>
       <p className={styles['author-name']}><FormattedMessage id="by" /> {props.post.name}</p>
-      <p className={styles['post-desc']}><ReactMarkdown source={props.post.content} /></p>
-      <p className={styles['post-action']}><a href="#" onClick={props.onDelete}><FormattedMessage id="deletePost" /></a></p>
+      <span className={styles['post-desc']}><ReactMarkdown source={props.post.content} /></span>
+      <span className={styles['post-action']}>
+        <ul>
+          <li><a href="#" onClick={props.onDelete}><FormattedMessage id="deletePost" /></a></li>
+          <li>
+            <Link to={`/posts/${props.post.slug}-${props.post.cuid}#comment`} >
+              <FormattedMessage id="commentPost" />
+            </Link>
+          </li>
+        </ul>
+      </span>
       <hr className={styles.divider} />
     </div>
   );

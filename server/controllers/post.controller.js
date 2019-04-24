@@ -1,4 +1,4 @@
-import Post from '../models/post';
+import { PostModel } from '../models/post.model';
 import cuid from 'cuid';
 import slug from 'limax';
 import sanitizeHtml from 'sanitize-html';
@@ -10,7 +10,7 @@ import sanitizeHtml from 'sanitize-html';
  * @returns void
  */
 export function getPosts(req, res) {
-  Post.find().sort('-dateAdded').exec((err, posts) => {
+  PostModel.find().sort('-dateAdded').exec((err, posts) => {
     if (err) {
       res.status(500).send(err);
     }
@@ -29,7 +29,7 @@ export function addPost(req, res) {
     res.status(403).end();
   }
 
-  const newPost = new Post(req.body.post);
+  const newPost = new PostModel(req.body.post);
 
   // Let's sanitize inputs
   newPost.title = sanitizeHtml(newPost.title);
@@ -53,7 +53,7 @@ export function addPost(req, res) {
  * @returns void
  */
 export function getPost(req, res) {
-  Post.findOne({ cuid: req.params.cuid }).exec((err, post) => {
+  PostModel.findOne({ cuid: req.params.cuid }).exec((err, post) => {
     if (err) {
       res.status(500).send(err);
     }
@@ -68,7 +68,7 @@ export function getPost(req, res) {
  * @returns void
  */
 export function deletePost(req, res) {
-  Post.findOne({ cuid: req.params.cuid }).exec((err, post) => {
+  PostModel.findOne({ cuid: req.params.cuid }).exec((err, post) => {
     if (err) {
       res.status(500).send(err);
     }

@@ -18,6 +18,13 @@ test('renders properly', t => {
   t.truthy(wrapper.hasClass('single-post'));
   t.is(wrapper.find('Link').first().prop('children'), post.title);
   t.regex(wrapper.find('.author-name').first().text(), new RegExp(post.name));
+});
+
+test('renders completely', t => {
+  const wrapper = mountWithIntl(
+    <PostListItem {...props} />
+  );
+
   t.is(wrapper.find('.post-desc').first().text(), post.content);
 });
 
@@ -37,6 +44,6 @@ test('calls onDelete', t => {
     <PostListItem post={post} onDelete={onDelete} />
   );
 
-  wrapper.find('.post-action > a').first().simulate('click');
+  wrapper.find('.post-action a').first().simulate('click');
   t.truthy(onDelete.calledOnce);
 });
