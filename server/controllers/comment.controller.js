@@ -2,6 +2,12 @@ import cuid from 'cuid';
 import sanitizeHtml from 'sanitize-html';
 import { CommentModel } from '../models/comment.model';
 
+/**
+ * Get all comments by post
+ * @param {*} req
+ * @param {*} res
+ * @returns void
+ */
 export function getPostComments(req, res) {
   CommentModel.find({ postId: req.params.postId }).sort('dateAdded').exec((err, comments) => {
     if (err) {
@@ -11,6 +17,12 @@ export function getPostComments(req, res) {
   });
 }
 
+
+/**
+ * Create new comment
+ * @param {*} req
+ * @param {*} res
+ */
 export function addComment(req, res) {
   if (!req.body.comment.postId || !req.body.comment.author || !req.body.comment.content) {
     res.status(403).end();

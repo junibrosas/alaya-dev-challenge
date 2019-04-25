@@ -4,6 +4,8 @@ import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
 import path from 'path';
 import IntlWrapper from '../client/modules/Intl/IntlWrapper';
+import cookieParser from 'cookie-parser';
+import cuid from 'cuid';
 
 // Initialize the Express App
 const app = new Express();
@@ -11,6 +13,12 @@ const app = new Express();
 // Set Development modes checks
 const isDevMode = process.env.NODE_ENV === 'development' || false;
 const isProdMode = process.env.NODE_ENV === 'production' || false;
+
+export const cookieConfig = {
+  httpOnly: true,
+  maxAge: 1000000000,
+  signed: false,
+};
 
 // Run Webpack dev server in development mode
 if (isDevMode) {
@@ -49,6 +57,7 @@ import { PostRoutes } from './routes/post.routes';
 import { CommentRoutes } from './routes/comment.routes';
 import dummyData from './dummyData';
 import serverConfig from './config';
+import { LikeRoutes } from './routes/like.routes';
 
 // Set native promises as mongoose promise
 mongoose.Promise = global.Promise;
@@ -71,8 +80,11 @@ app.use(compression());
 app.use(bodyParser.json({ limit: '20mb' }));
 app.use(bodyParser.urlencoded({ limit: '20mb', extended: false }));
 app.use(Express.static(path.resolve(__dirname, '../dist/client')));
+app.use(cookieParser());
+
 app.use('/api/posts', PostRoutes);
 app.use('/api/comment', CommentRoutes);
+app.use('/api/like', LikeRoutes);
 
 // Render Initial HTML
 const renderFullPage = (html, initialState) => {
@@ -119,6 +131,15 @@ const renderError = err => {
   return renderFullPage(`Server Error${errTrace}`, {});
 };
 
+// set a cookie for each temporary user that browse the app
+app.use((req, res, next) => {
+  const cookies = req.cookies;
+  if (!cookies.userId) {
+    res.cookie('userId', cuid(), cookieConfig);
+  }
+  next();
+});
+
 // Server Side Rendering based on routes matched by React-router.
 app.use((req, res, next) => {
   match({ routes, location: req.url }, (err, redirectLocation, renderProps) => {
@@ -155,6 +176,7 @@ app.use((req, res, next) => {
       .catch((error) => next(error));
   });
 });
+
 
 // start app
 app.listen(serverConfig.port, (error) => {

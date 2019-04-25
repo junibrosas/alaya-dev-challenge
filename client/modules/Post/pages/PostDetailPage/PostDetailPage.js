@@ -4,23 +4,22 @@ import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 import { FormattedMessage } from 'react-intl';
 
-// Import Style
 import styles from '../../components/PostListItem/PostListItem.css';
-
-// Import Actions
-import { fetchPost, addCommentRequest, fetchPostComments } from '../../PostActions';
-
-// Import Selectors
+import { fetchPost, addCommentRequest, fetchPostComments, likePost } from '../../PostActions';
 import { getPost, getPostComments } from '../../PostReducer';
+
 import CommentForm from '../../components/CommentForm/CommentForm';
 import CommentList from '../../components/CommentList/CommentList';
+import LikeButton from '../../components/LikeButton/LikeButton';
 
 export class PostDetailPage extends React.Component {
 
   componentDidMount() {
     const { post, dispatch } = this.props;
 
-    dispatch(fetchPostComments(post.cuid));
+    if (post) {
+      dispatch(fetchPostComments(post.cuid));
+    }
   }
 
   handleCommentSubmit = (comment) => {
@@ -34,6 +33,12 @@ export class PostDetailPage extends React.Component {
     dispatch(fetchPostComments(post.cuid));
   }
 
+  handleLike = () => {
+    const { post, dispatch } = this.props;
+
+    dispatch(likePost(post.cuid));
+  }
+
   render() {
     const { post, comments } = this.props;
 
@@ -44,6 +49,11 @@ export class PostDetailPage extends React.Component {
           <h3 className={styles['post-title']}>{post.title}</h3>
           <p className={styles['author-name']}><FormattedMessage id="by" /> {post.name}</p>
           <p className={styles['post-desc']}>{post.content}</p>
+
+          <LikeButton
+            likes={post.likes.length}
+            onLiked={this.handleLike}
+          />
 
           {comments && comments.length > 0 &&
             <CommentList comments={comments} />
@@ -59,11 +69,9 @@ export class PostDetailPage extends React.Component {
 }
 
 // Actions required to provide data for this component to render in server side.
-PostDetailPage.need = [
-  params => fetchPost(params.cuid),
-];
+PostDetailPage.need = [(params) => { return fetchPost(params.cuid); }];
 
-// Retrieve data from store as props
+
 function mapStateToProps(state, props) {
   return {
     post: getPost(state, props.params.cuid),
@@ -83,6 +91,7 @@ PostDetailPage.propTypes = {
     content: PropTypes.string.isRequired,
     slug: PropTypes.string.isRequired,
     cuid: PropTypes.string.isRequired,
+    likes: PropTypes.array.isRequired,
   }).isRequired,
   dispatch: PropTypes.func,
 };

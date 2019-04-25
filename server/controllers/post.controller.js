@@ -53,12 +53,11 @@ export function addPost(req, res) {
  * @returns void
  */
 export function getPost(req, res) {
-  PostModel.findOne({ cuid: req.params.cuid }).exec((err, post) => {
-    if (err) {
-      res.status(500).send(err);
-    }
-    res.json({ post });
-  });
+  PostModel.findOne({ cuid: req.params.cuid })
+    .exec((err, post) => {
+      if (err) { res.status(500).send(err); }
+      res.json({ post });
+    });
 }
 
 /**

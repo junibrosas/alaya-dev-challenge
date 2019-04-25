@@ -21,7 +21,7 @@ test('action for ADD_POST is working', reducerTest(
     _id: null,
     cuid: null,
     slug: 'first-post',
-  }, 'foo'] },
+  }] },
 ));
 
 test('action for DELETE_POST is working', reducerTest(
