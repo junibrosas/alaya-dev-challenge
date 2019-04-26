@@ -29,8 +29,6 @@ export class PostDetailPage extends React.Component {
       ...comment,
       postId: post.cuid,
     }));
-
-    dispatch(fetchPostComments(post.cuid));
   }
 
   handleLike = () => {

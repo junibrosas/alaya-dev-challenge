@@ -4,7 +4,6 @@ export const SET_POST = 'SET_POST';
 export const ADD_POST = 'ADD_POST';
 export const ADD_POSTS = 'ADD_POSTS';
 export const DELETE_POST = 'DELETE_POST';
-export const ADD_COMMENT = 'ADD_COMMENT';
 export const SET_POST_COMMENTS = 'SET_POST_COMMENTS';
 
 export function addPost(post) {
@@ -35,12 +34,6 @@ export function setComments(comments) {
   };
 }
 
-export function addComment(comment) {
-  return {
-    type: ADD_COMMENT,
-    comment,
-  };
-}
 
 /**
  * API Action Thunks
@@ -89,7 +82,7 @@ export function addCommentRequest(comment) {
         author,
         content,
       } })
-      .then(res => dispatch(addComment(res.comment)));
+      .then(() => dispatch(fetchPostComments(postId)));
   };
 }
 
