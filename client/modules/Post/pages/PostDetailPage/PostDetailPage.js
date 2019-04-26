@@ -6,7 +6,7 @@ import { FormattedMessage } from 'react-intl';
 
 import styles from '../../components/PostListItem/PostListItem.css';
 import { fetchPost, addCommentRequest, fetchPostComments, likePost } from '../../PostActions';
-import { getPost, getPostComments } from '../../PostReducer';
+import { getPost, getPostComments, getGui } from '../../PostReducer';
 
 import { CommentForm } from '../../components/CommentForm/CommentForm';
 import { CommentList } from '../../components/CommentList/CommentList';
@@ -38,7 +38,7 @@ export class PostDetailPage extends React.Component {
   }
 
   render() {
-    const { post, comments } = this.props;
+    const { post, comments, gui } = this.props;
 
     return (
       <div>
@@ -57,7 +57,7 @@ export class PostDetailPage extends React.Component {
             <CommentList comments={comments} />
           }
 
-          <CommentForm onSubmit={this.handleCommentSubmit} />
+          <CommentForm isLoading={gui.isLoadingComment} onSubmit={this.handleCommentSubmit} />
         </div>
       </div>
     );
@@ -71,11 +71,15 @@ PostDetailPage.need = [(params) => { return fetchPost(params.cuid); }];
 function mapStateToProps(state, props) {
   return {
     post: getPost(state, props.params.cuid),
+    gui: getGui(state),
     comments: getPostComments(state),
   };
 }
 
 PostDetailPage.propTypes = {
+  gui: PropTypes.shape({
+    isLoadingComment: PropTypes.bool.isRequired,
+  }),
   comments: PropTypes.arrayOf(PropTypes.shape({
     author: PropTypes.string.isRequired,
     content: PropTypes.string.isRequired,

@@ -1,8 +1,11 @@
-import { ADD_POST, ADD_POSTS, DELETE_POST, SET_POST_COMMENTS } from './PostActions';
+import { ADD_POST, ADD_POSTS, DELETE_POST, SET_POST_COMMENTS, LOADING_COMMENT } from './PostActions';
 
 const initialState = {
   data: [],
   comments: [],
+  gui: {
+    isLoadingComment: false,
+  },
 };
 
 const PostReducer = (state = initialState, action) => {
@@ -32,6 +35,15 @@ const PostReducer = (state = initialState, action) => {
         comments: action.comments,
       };
 
+    case LOADING_COMMENT:
+      return {
+        ...state,
+        gui: {
+          ...state.gui,
+          isLoadingComment: action.isLoading,
+        },
+      };
+
     default:
       return state;
   }
@@ -45,5 +57,6 @@ const PostReducer = (state = initialState, action) => {
 export const getPosts = state => state.posts.data;
 export const getPost = (state, cuid) => state.posts.data.filter(post => post.cuid === cuid)[0];
 export const getPostComments = (state) => state.posts.comments;
+export const getGui = (state) => state.posts.gui;
 
 export default PostReducer;

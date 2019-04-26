@@ -5,6 +5,7 @@ export const ADD_POST = 'ADD_POST';
 export const ADD_POSTS = 'ADD_POSTS';
 export const DELETE_POST = 'DELETE_POST';
 export const SET_POST_COMMENTS = 'SET_POST_COMMENTS';
+export const LOADING_COMMENT = 'LOADING_COMMENT';
 
 export function addPost(post) {
   return {
@@ -31,6 +32,13 @@ export function setComments(comments) {
   return {
     type: SET_POST_COMMENTS,
     comments,
+  };
+}
+
+export function setGuiLoadingComment(isLoading) {
+  return {
+    type: LOADING_COMMENT,
+    isLoading,
   };
 }
 
@@ -76,13 +84,17 @@ export function addCommentRequest(comment) {
   const { author, content, postId } = comment;
 
   return (dispatch) => {
+    dispatch(setGuiLoadingComment(true));
     return callApi('comment', 'post', {
       comment: {
         postId,
         author,
         content,
       } })
-      .then(() => dispatch(fetchPostComments(postId)));
+      .then(() => {
+        dispatch(setGuiLoadingComment(false));
+        dispatch(fetchPostComments(postId));
+      });
   };
 }
 

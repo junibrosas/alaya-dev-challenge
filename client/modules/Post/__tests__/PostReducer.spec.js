@@ -1,7 +1,7 @@
 import test from 'ava';
 import { reducerTest } from 'redux-ava';
-import postReducer, { getPost, getPosts, getPostComments } from '../PostReducer';
-import { addPost, deletePost, addPosts, setComments } from '../PostActions';
+import postReducer, { getPost, getPosts, getPostComments, getGui } from '../PostReducer';
+import { addPost, deletePost, addPosts, setComments, setGuiLoadingComment } from '../PostActions';
 
 test('action for ADD_POST is working', reducerTest(
   postReducer,
@@ -84,6 +84,13 @@ test('action for SET_POST_COMMENTS is working', reducerTest(
   }] },
 ));
 
+test('action for LOADING_COMMENT is working', reducerTest(
+  postReducer,
+  { gui: { isLoadingComment: false } },
+  setGuiLoadingComment(true),
+  { gui: { isLoadingComment: true } },
+));
+
 test('getPosts selector', t => {
   t.deepEqual(
     getPosts({
@@ -108,5 +115,14 @@ test('getPostComments selector', t => {
       posts: { comments: ['foo'] },
     }),
     ['foo']
+  );
+});
+
+test('getGui selector', t => {
+  t.deepEqual(
+    getGui({
+      posts: { gui: { isLoadingComment: true } },
+    }),
+    { isLoadingComment: true }
   );
 });

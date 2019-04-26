@@ -44,6 +44,7 @@ export class CommentFormComponent extends Component {
     const { author, content } = this.state.comment;
     const styles = { ...commentFormStyle, ...postCreateStyle };
     const cls = `${styles.form} ${styles.appear} ${styles['comment-form']}`;
+    const { isLoading } = this.props;
 
     return (
       <div className={cls}>
@@ -66,6 +67,7 @@ export class CommentFormComponent extends Component {
             type="submit"
             className={styles['post-submit-button']}
             onClick={this.handleSubmit}
+            disabled={isLoading}
           >
             <FormattedMessage id="commentSubmit" />
           </button>
@@ -76,6 +78,7 @@ export class CommentFormComponent extends Component {
 }
 
 CommentFormComponent.propTypes = {
+  isLoading: PropTypes.bool.isRequired,
   onSubmit: PropTypes.func.isRequired,
   intl: intlShape,
 };
