@@ -44,6 +44,6 @@ test('calls onDelete', t => {
     <PostListItem post={post} onDelete={onDelete} />
   );
 
-  wrapper.find('.post-action a').first().simulate('click');
+  wrapper.find('.post-action a').last().simulate('click');
   t.truthy(onDelete.calledOnce);
 });

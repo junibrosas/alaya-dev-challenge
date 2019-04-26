@@ -59,9 +59,7 @@ export class PostDetailPage extends React.Component {
             <CommentList comments={comments} />
           }
 
-          <div id="comment">
-            <CommentForm onSubmit={this.handleCommentSubmit} />
-          </div>
+          <CommentForm onSubmit={this.handleCommentSubmit} />
         </div>
       </div>
     );

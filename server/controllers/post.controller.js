@@ -2,6 +2,7 @@ import { PostModel } from '../models/post.model';
 import cuid from 'cuid';
 import slug from 'limax';
 import sanitizeHtml from 'sanitize-html';
+import { CommentModel } from '../models/comment.model';
 
 /**
  * Get all posts
@@ -68,12 +69,14 @@ export function getPost(req, res) {
  */
 export function deletePost(req, res) {
   PostModel.findOne({ cuid: req.params.cuid }).exec((err, post) => {
-    if (err) {
-      res.status(500).send(err);
-    }
+    if (err) { res.status(500).send(err); }
 
     post.remove(() => {
-      res.status(200).end();
+      CommentModel.find({ postId: post.cuid }).remove().exec((cres) => {
+        if (cres) { res.status(500).send(cres); }
+
+        res.status(200).end();
+      });
     });
   });
 }

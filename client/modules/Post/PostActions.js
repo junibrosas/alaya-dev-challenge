@@ -60,7 +60,6 @@ export function fetchPost(cuid) {
   };
 }
 
-
 export function fetchPostComments(postId) {
   return (dispatch) => {
     return callApi(`comment/${postId}`, 'get')
