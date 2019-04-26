@@ -10,7 +10,7 @@ export function CommentItem(props) {
 
   return (
     <div className={styles.item}>
-      <div><p><span className={styles.author}>{author}</span> commented {date}</p></div>
+      <p><span className={styles.author}>{author}</span> commented {date}</p>
       <div>{content}</div>
     </div>
   );
@@ -23,5 +23,3 @@ CommentItem.propTypes = {
     dateAdded: PropTypes.string.isRequired,
   }),
 };
-
-export default CommentItem;

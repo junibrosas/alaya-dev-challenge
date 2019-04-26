@@ -29,5 +29,3 @@ LikeButton.propTypes = {
   likes: PropTypes.number.isRequired,
   onLiked: PropTypes.func.isRequired,
 };
-
-export default LikeButton;

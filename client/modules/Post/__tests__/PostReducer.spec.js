@@ -1,7 +1,7 @@
 import test from 'ava';
 import { reducerTest } from 'redux-ava';
-import postReducer, { getPost, getPosts } from '../PostReducer';
-import { addPost, deletePost, addPosts } from '../PostActions';
+import postReducer, { getPost, getPosts, getPostComments } from '../PostReducer';
+import { addPost, deletePost, addPosts, setComments } from '../PostActions';
 
 test('action for ADD_POST is working', reducerTest(
   postReducer,
@@ -61,6 +61,29 @@ test('action for ADD_POSTS is working', reducerTest(
   }] },
 ));
 
+test('action for SET_POST_COMMENTS is working', reducerTest(
+  postReducer,
+  { comments: [] },
+  setComments([
+    {
+      _id: null,
+      cuid: null,
+      postId: null,
+      author: 'Captain America',
+      dateAdded: '2019-04-26T02:31:39.339Z',
+      content: 'I can do this all day.',
+    },
+  ]),
+  { comments: [{
+    _id: null,
+    cuid: null,
+    postId: null,
+    author: 'Captain America',
+    dateAdded: '2019-04-26T02:31:39.339Z',
+    content: 'I can do this all day.',
+  }] },
+));
+
 test('getPosts selector', t => {
   t.deepEqual(
     getPosts({
@@ -79,3 +102,11 @@ test('getPost selector', t => {
   );
 });
 
+test('getPostComments selector', t => {
+  t.deepEqual(
+    getPostComments({
+      posts: { comments: ['foo'] },
+    }),
+    ['foo']
+  );
+});

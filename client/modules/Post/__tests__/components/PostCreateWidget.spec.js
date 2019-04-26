@@ -50,7 +50,7 @@ test('calls addPost', t => {
   wrapper.ref('title').value = 'Some Title';
   wrapper.ref('content').value = 'Bla Bla Bla';
 
-  wrapper.find('a').first().simulate('click');
+  wrapper.find('button').first().simulate('click');
   t.truthy(addPost.calledOnce);
   t.truthy(addPost.calledWith('David', 'Some Title', 'Bla Bla Bla'));
 });
@@ -61,6 +61,6 @@ test('empty form doesn\'t call addPost', t => {
     <PostCreateWidget addPost={addPost} showAddPost />
   );
 
-  wrapper.find('a').first().simulate('click');
+  wrapper.find('button').first().simulate('click');
   t.falsy(addPost.called);
 });

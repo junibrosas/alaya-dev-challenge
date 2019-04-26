@@ -37,15 +37,13 @@ const PostReducer = (state = initialState, action) => {
   }
 };
 
-/* Selectors */
 
-// Get all posts
+/**
+ * State Selectors
+ */
+
 export const getPosts = state => state.posts.data;
-
-// Get post by cuid
 export const getPost = (state, cuid) => state.posts.data.filter(post => post.cuid === cuid)[0];
-
-// Get comments related to a post
 export const getPostComments = (state) => state.posts.comments;
 
 export default PostReducer;

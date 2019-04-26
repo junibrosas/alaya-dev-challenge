@@ -8,9 +8,9 @@ import styles from '../../components/PostListItem/PostListItem.css';
 import { fetchPost, addCommentRequest, fetchPostComments, likePost } from '../../PostActions';
 import { getPost, getPostComments } from '../../PostReducer';
 
-import CommentForm from '../../components/CommentForm/CommentForm';
-import CommentList from '../../components/CommentList/CommentList';
-import LikeButton from '../../components/LikeButton/LikeButton';
+import { CommentForm } from '../../components/CommentForm/CommentForm';
+import { CommentList } from '../../components/CommentList/CommentList';
+import { LikeButton } from '../../components/LikeButton/LikeButton';
 
 export class PostDetailPage extends React.Component {
 

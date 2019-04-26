@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import styles from './CommentList.css';
-import CommentItem from '../CommentItem/CommentItem';
+import { CommentItem } from '../CommentItem/CommentItem';
 
 export function CommentList(props) {
   return (
@@ -19,5 +19,3 @@ CommentList.propTypes = {
     dateAdded: PropTypes.string.isRequired,
   })),
 };
-
-export default CommentList;

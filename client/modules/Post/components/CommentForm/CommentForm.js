@@ -4,20 +4,19 @@ import { injectIntl, intlShape, FormattedMessage } from 'react-intl';
 
 import postCreateStyle from '../PostCreateWidget/PostCreateWidget.css';
 import commentFormStyle from './CommentForm.css';
-
-export class CommentForm extends Component {
+export class CommentFormComponent extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      comment: this.getDefaultComment(),
-    };
+    this.state = this.getDefaultState();
   }
 
-  getDefaultComment = () => {
+  getDefaultState = () => {
     return {
-      author: '',
-      content: '',
+      comment: {
+        author: '',
+        content: '',
+      },
     };
   }
 
@@ -32,10 +31,13 @@ export class CommentForm extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    this.setState({
-      comment: this.getDefaultComment(),
-    });
+
+    const { author, content } = this.state.comment;
+
+    if (!author && !content) return;
+
     this.props.onSubmit(this.state.comment);
+    this.setState(this.getDefaultState());
   }
 
   render() {
@@ -60,22 +62,22 @@ export class CommentForm extends Component {
             value={content}
             onChange={this.handleChange}
           />
-          <a
+          <button
+            type="submit"
             className={styles['post-submit-button']}
-            href="#"
             onClick={this.handleSubmit}
           >
             <FormattedMessage id="commentSubmit" />
-          </a>
+          </button>
         </div>
       </div>
     );
   }
 }
 
-CommentForm.propTypes = {
+CommentFormComponent.propTypes = {
   onSubmit: PropTypes.func.isRequired,
-  intl: intlShape.isRequired,
+  intl: intlShape,
 };
 
-export default injectIntl(CommentForm);
+export const CommentForm = injectIntl(CommentFormComponent);
