@@ -1,4 +1,5 @@
 import callApi from '../../util/apiCaller';
+import { toggleAddPost } from '../App/AppActions';
 
 export const SET_POST = 'SET_POST';
 export const ADD_POST = 'ADD_POST';
@@ -68,7 +69,7 @@ export function fetchPostComments(postId) {
   };
 }
 
-export function addPostRequest(post) {
+export function addPostRequest(post, router) {
   return (dispatch) => {
     return callApi('posts', 'post', {
       post: {
@@ -76,7 +77,11 @@ export function addPostRequest(post) {
         title: post.title,
         content: post.content,
       },
-    }).then(res => dispatch(addPost(res.post)));
+    }).then(res => {
+      dispatch(addPost(res.post));
+      dispatch(toggleAddPost());
+      router.push(`/posts/${res.post.slug}-${res.post.cuid}`);
+    });
   };
 }
 

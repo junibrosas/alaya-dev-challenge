@@ -65,7 +65,7 @@ test('calling toggleAddPostSection dispatches toggleAddPost', t => {
     <App {...props} />
   );
 
-  wrapper.instance().toggleAddPostSection();
+  wrapper.instance().toggleAddPostSection({ preventDefault: () => {} });
   t.truthy(dispatch.calledOnce);
   t.truthy(dispatch.calledWith(toggleAddPost()));
 });

@@ -30,7 +30,8 @@ export class App extends Component {
     this.setState({isMounted: true}); // eslint-disable-line
   }
 
-  toggleAddPostSection = () => {
+  toggleAddPostSection = (e) => {
+    e.preventDefault();
     this.props.dispatch(toggleAddPost());
   };
 

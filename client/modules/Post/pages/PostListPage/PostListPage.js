@@ -8,7 +8,6 @@ import PostCreateWidget from '../../components/PostCreateWidget/PostCreateWidget
 
 // Import Actions
 import { addPostRequest, fetchPosts, deletePostRequest } from '../../PostActions';
-import { toggleAddPost } from '../../../App/AppActions';
 
 // Import Selectors
 import { getShowAddPost } from '../../../App/AppReducer';
@@ -26,8 +25,7 @@ class PostListPage extends Component {
   };
 
   handleAddPost = (name, title, content) => {
-    this.props.dispatch(toggleAddPost());
-    this.props.dispatch(addPostRequest({ name, title, content }));
+    this.props.dispatch(addPostRequest({ name, title, content }, this.props.router));
   };
 
   handleCommentPost = (e) => {
@@ -62,6 +60,7 @@ function mapStateToProps(state) {
 }
 
 PostListPage.propTypes = {
+  router: PropTypes.object,
   posts: PropTypes.arrayOf(PropTypes.shape({
     name: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
