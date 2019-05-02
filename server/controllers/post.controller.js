@@ -3,6 +3,7 @@ import cuid from 'cuid';
 import slug from 'limax';
 import sanitizeHtml from 'sanitize-html';
 import { CommentModel } from '../models/comment.model';
+import { getErrorMessage } from '../util/errorHandler';
 
 /**
  * Get all posts
@@ -13,9 +14,12 @@ import { CommentModel } from '../models/comment.model';
 export function getPosts(req, res) {
   PostModel.find().sort('-dateAdded').exec((err, posts) => {
     if (err) {
-      res.status(500).send(err);
+      return res.status(400).json({
+        error: getErrorMessage(err),
+      });
     }
-    res.json({ posts });
+
+    return res.json({ posts });
   });
 }
 
@@ -27,7 +31,7 @@ export function getPosts(req, res) {
  */
 export function addPost(req, res) {
   if (!req.body.post.name || !req.body.post.title || !req.body.post.content) {
-    res.status(403).end();
+    return res.status(403).end();
   }
 
   const newPost = new PostModel(req.body.post);
@@ -39,12 +43,18 @@ export function addPost(req, res) {
 
   newPost.slug = slug(newPost.title.toLowerCase(), { lowercase: true });
   newPost.cuid = cuid();
+
   newPost.save((err, saved) => {
     if (err) {
-      res.status(500).send(err);
+      return res.status(400).json({
+        error: getErrorMessage(err),
+      });
     }
-    res.json({ post: saved });
+
+    return res.json({ post: saved });
   });
+
+  return res;
 }
 
 /**
@@ -56,8 +66,13 @@ export function addPost(req, res) {
 export function getPost(req, res) {
   PostModel.findOne({ cuid: req.params.cuid })
     .exec((err, post) => {
-      if (err) { res.status(500).send(err); }
-      res.json({ post });
+      if (err) {
+        return res.status(400).json({
+          error: getErrorMessage(err),
+        });
+      }
+
+      return res.json({ post });
     });
 }
 
@@ -69,14 +84,24 @@ export function getPost(req, res) {
  */
 export function deletePost(req, res) {
   PostModel.findOne({ cuid: req.params.cuid }).exec((err, post) => {
-    if (err) { res.status(500).send(err); }
+    if (err) {
+      return res.status(400).json({
+        error: getErrorMessage(err),
+      });
+    }
 
     post.remove(() => {
       CommentModel.find({ postId: post.cuid }).remove().exec((cres) => {
-        if (cres) { res.status(500).send(cres); }
+        if (cres) {
+          return res.status(400).json({
+            error: getErrorMessage(cres),
+          });
+        }
 
-        res.status(200).end();
+        return res.status(200).end();
       });
     });
+
+    return res;
   });
 }
