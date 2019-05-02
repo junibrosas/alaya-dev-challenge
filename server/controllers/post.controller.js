@@ -6,7 +6,7 @@ import { CommentModel } from '../models/comment.model';
 import { getErrorMessage } from '../util/errorHandler';
 
 /**
- * Get all posts
+ * GET: Get all posts
  * @param req
  * @param res
  * @returns void
@@ -24,14 +24,13 @@ export function getPosts(req, res) {
 }
 
 /**
- * Save a post
- * @param req
- * @param res
- * @returns void
+ * POST: Save a post
  */
 export function addPost(req, res) {
   if (!req.body.post.name || !req.body.post.title || !req.body.post.content) {
-    return res.status(403).end();
+    return res.status(403).json({
+      error: 'Required fields: author, title, content',
+    });
   }
 
   const newPost = new PostModel(req.body.post);
@@ -58,10 +57,7 @@ export function addPost(req, res) {
 }
 
 /**
- * Get a single post
- * @param req
- * @param res
- * @returns void
+ * GET: Get a single post
  */
 export function getPost(req, res) {
   PostModel.findOne({ cuid: req.params.cuid })
@@ -77,10 +73,7 @@ export function getPost(req, res) {
 }
 
 /**
- * Delete a post
- * @param req
- * @param res
- * @returns void
+ * DELETE: Delete a post
  */
 export function deletePost(req, res) {
   PostModel.findOne({ cuid: req.params.cuid }).exec((err, post) => {
@@ -108,10 +101,18 @@ export function deletePost(req, res) {
 
 
 /**
- * Create like & push like to post
+ * POST: Create like & push like to post
  */
 export const likePost = (req, res) => {
-  PostModel.findOneAndUpdate({ cuid: req.body.postId }, { $push: { likes: req.body.userId } }, { new: true })
+  const { postId, userId } = req.body;
+
+  if (!postId || !userId) {
+    return res.status(403).json({
+      error: 'Required fields: postId, userId',
+    });
+  }
+
+  PostModel.findOneAndUpdate({ cuid: postId }, { $push: { likes: userId } }, { new: true })
   .exec((err, result) => {
     if (err) {
       return res.status(400).json({
@@ -121,13 +122,23 @@ export const likePost = (req, res) => {
 
     return res.json({ result });
   });
+
+  return res;
 };
 
 /**
- * Remove like & pull like from post
+ * POST: Remove like & pull like from post
  */
 export const unlikePost = (req, res) => {
-  PostModel.findOneAndUpdate({ cuid: req.body.postId }, { $pull: { likes: req.body.userId } }, { new: true })
+  const { postId, userId } = req.body;
+
+  if (!postId || !userId) {
+    return res.status(403).json({
+      error: 'Required fields: postId, userId',
+    });
+  }
+
+  PostModel.findOneAndUpdate({ cuid: postId }, { $pull: { likes: userId } }, { new: true })
   .exec((err, result) => {
     if (err) {
       return res.status(400).json({
@@ -137,11 +148,13 @@ export const unlikePost = (req, res) => {
 
     return res.json({ result });
   });
+
+  return res;
 };
 
 
 /**
- * Get all comments by post
+ * GET: Get all comments by post
  * @param {*} req
  * @param {*} res
  * @returns void
@@ -158,7 +171,9 @@ export function getPostComments(req, res) {
   });
 }
 
-// Create new comment
+/**
+ * POST: Create new comment
+ */
 export function addComment(req, res) {
   if (!req.body.comment.postId || !req.body.comment.author || !req.body.comment.content) {
     return res.status(400).json({
