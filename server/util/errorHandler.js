@@ -31,7 +31,6 @@ export const getErrorMessage = (err) => {
         message = 'Something went wrong';
     }
   } else {
-    console.warn(err);
     Object.keys(err.errors).forEach((error) => {
       if (err.errors.hasOwnProperty(error) && err.errors[error].message) {
         message = err.errors[error].message;
