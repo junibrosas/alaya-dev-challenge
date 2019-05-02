@@ -65,6 +65,7 @@ export function addPost(req, res) {
  */
 export function getPost(req, res) {
   PostModel.findOne({ cuid: req.params.cuid })
+    .populate('likes')
     .exec((err, post) => {
       if (err) {
         return res.status(400).json({

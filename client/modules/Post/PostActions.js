@@ -6,7 +6,7 @@ export const ADD_POST = 'ADD_POST';
 export const ADD_POSTS = 'ADD_POSTS';
 export const DELETE_POST = 'DELETE_POST';
 export const SET_POST_COMMENTS = 'SET_POST_COMMENTS';
-export const LOADING_COMMENT = 'LOADING_COMMENT';
+export const GUI_LOADING_COMMENT = 'GUI_LOADING_COMMENT';
 
 export function addPost(post) {
   return {
@@ -38,11 +38,10 @@ export function setComments(comments) {
 
 export function setGuiLoadingComment(isLoading) {
   return {
-    type: LOADING_COMMENT,
+    type: GUI_LOADING_COMMENT,
     isLoading,
   };
 }
-
 
 /**
  * API Action Thunks
@@ -105,8 +104,21 @@ export function addCommentRequest(comment) {
 
 export function likePost(postId) {
   return (dispatch) => {
-    return callApi('like', 'post', { postId })
-      .then(res => dispatch(addPost(res.result)));
+    return callApi('posts/like', 'post', { postId })
+      .then(res => {
+        const post = res.result;
+        dispatch(addPost(post));
+      });
+  };
+}
+
+export function unLikePost(postId) {
+  return (dispatch) => {
+    return callApi('posts/unlike', 'post', { postId })
+      .then(res => {
+        const post = res.result;
+        dispatch(addPost(post));
+      });
   };
 }
 

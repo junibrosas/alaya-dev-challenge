@@ -3,9 +3,11 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 import { FormattedMessage } from 'react-intl';
+import Cookies from 'js-cookie';
+
 
 import styles from '../../components/PostListItem/PostListItem.css';
-import { fetchPost, addCommentRequest, fetchPostComments, likePost } from '../../PostActions';
+import { fetchPost, addCommentRequest, fetchPostComments, likePost, unLikePost } from '../../PostActions';
 import { getPost, getPostComments, getGui } from '../../PostReducer';
 
 import { CommentForm } from '../../components/CommentForm/CommentForm';
@@ -13,6 +15,17 @@ import { CommentList } from '../../components/CommentList/CommentList';
 import { LikeButton } from '../../components/LikeButton/LikeButton';
 
 export class PostDetailPage extends React.Component {
+  constructor(props) {
+    super(props);
+
+    const { post } = props;
+    const userId = Cookies.get('userId');
+    const result = post.likes.find((like) => like.userId === userId && like.postId === post.cuid);
+
+    this.state = {
+      isPostLiked: !!result,
+    };
+  }
 
   componentDidMount() {
     const { post, dispatch } = this.props;
@@ -34,11 +47,18 @@ export class PostDetailPage extends React.Component {
   handleLike = () => {
     const { post, dispatch } = this.props;
 
-    dispatch(likePost(post.cuid));
+    if (this.state.isPostLiked) {
+      this.setState({ isPostLiked: false });
+      dispatch(unLikePost(post.cuid));
+    } else {
+      this.setState({ isPostLiked: true });
+      dispatch(likePost(post.cuid));
+    }
   }
 
   render() {
     const { post, comments, gui } = this.props;
+    const { isPostLiked } = this.state;
 
     return (
       <div>
@@ -50,6 +70,7 @@ export class PostDetailPage extends React.Component {
 
           <LikeButton
             likes={post.likes.length}
+            hasLiked={isPostLiked}
             onLiked={this.handleLike}
           />
 
@@ -79,6 +100,7 @@ function mapStateToProps(state, props) {
 PostDetailPage.propTypes = {
   gui: PropTypes.shape({
     isLoadingComment: PropTypes.bool.isRequired,
+    isPostLiked: PropTypes.bool.isRequired,
   }),
   comments: PropTypes.arrayOf(PropTypes.shape({
     author: PropTypes.string.isRequired,

@@ -15,7 +15,7 @@ const isDevMode = process.env.NODE_ENV === 'development' || false;
 const isProdMode = process.env.NODE_ENV === 'production' || false;
 
 export const cookieConfig = {
-  httpOnly: true,
+  httpOnly: false,
   maxAge: 1000000000,
   signed: false,
 };
@@ -57,7 +57,6 @@ import { PostRoutes } from './routes/post.routes';
 import { CommentRoutes } from './routes/comment.routes';
 import dummyData from './dummyData';
 import serverConfig from './config';
-import { LikeRoutes } from './routes/like.routes';
 
 // Set native promises as mongoose promise
 mongoose.Promise = global.Promise;
@@ -84,7 +83,6 @@ app.use(cookieParser());
 
 app.use('/api/posts', PostRoutes);
 app.use('/api/comment', CommentRoutes);
-app.use('/api/like', LikeRoutes);
 
 // Render Initial HTML
 const renderFullPage = (html, initialState) => {

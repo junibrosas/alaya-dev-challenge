@@ -1,4 +1,4 @@
-import { ADD_POST, ADD_POSTS, DELETE_POST, SET_POST_COMMENTS, LOADING_COMMENT } from './PostActions';
+import { ADD_POST, ADD_POSTS, DELETE_POST, SET_POST_COMMENTS, GUI_LOADING_COMMENT } from './PostActions';
 
 const initialState = {
   data: [],
@@ -35,7 +35,7 @@ const PostReducer = (state = initialState, action) => {
         comments: action.comments,
       };
 
-    case LOADING_COMMENT:
+    case GUI_LOADING_COMMENT:
       return {
         ...state,
         gui: {

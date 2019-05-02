@@ -84,7 +84,7 @@ test('action for SET_POST_COMMENTS is working', reducerTest(
   }] },
 ));
 
-test('action for LOADING_COMMENT is working', reducerTest(
+test('action for GUI_LOADING_COMMENT is working', reducerTest(
   postReducer,
   { gui: { isLoadingComment: false } },
   setGuiLoadingComment(true),
