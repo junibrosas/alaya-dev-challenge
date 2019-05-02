@@ -1,4 +1,4 @@
-import { PostModel } from '../models/post.model';
+import { Post } from '../models/post.model';
 import cuid from 'cuid';
 import slug from 'limax';
 import sanitizeHtml from 'sanitize-html';
@@ -12,7 +12,7 @@ import { getErrorMessage } from '../util/errorHandler';
  * @returns void
  */
 export function getPosts(req, res) {
-  PostModel.find().sort('-dateAdded').exec((err, posts) => {
+  Post.find().sort('-dateAdded').exec((err, posts) => {
     if (err) {
       return res.status(400).json({
         error: getErrorMessage(err),
@@ -33,7 +33,7 @@ export function addPost(req, res) {
     });
   }
 
-  const newPost = new PostModel(req.body.post);
+  const newPost = new Post(req.body.post);
 
   // Let's sanitize inputs
   newPost.title = sanitizeHtml(newPost.title);
@@ -60,7 +60,7 @@ export function addPost(req, res) {
  * GET: Get a single post
  */
 export function getPost(req, res) {
-  PostModel.findOne({ cuid: req.params.cuid })
+  Post.findOne({ cuid: req.params.cuid })
     .exec((err, post) => {
       if (err) {
         return res.status(400).json({
@@ -76,7 +76,7 @@ export function getPost(req, res) {
  * DELETE: Delete a post
  */
 export function deletePost(req, res) {
-  PostModel.findOne({ cuid: req.params.cuid }).exec((err, post) => {
+  Post.findOne({ cuid: req.params.cuid }).exec((err, post) => {
     if (err) {
       return res.status(400).json({
         error: getErrorMessage(err),
@@ -112,7 +112,7 @@ export const likePost = (req, res) => {
     });
   }
 
-  PostModel.findOneAndUpdate({ cuid: postId }, { $push: { likes: userId } }, { new: true })
+  Post.findOneAndUpdate({ cuid: postId }, { $push: { likes: userId } }, { new: true })
   .exec((err, result) => {
     if (err) {
       return res.status(400).json({
@@ -138,7 +138,7 @@ export const unlikePost = (req, res) => {
     });
   }
 
-  PostModel.findOneAndUpdate({ cuid: postId }, { $pull: { likes: userId } }, { new: true })
+  Post.findOneAndUpdate({ cuid: postId }, { $pull: { likes: userId } }, { new: true })
   .exec((err, result) => {
     if (err) {
       return res.status(400).json({
