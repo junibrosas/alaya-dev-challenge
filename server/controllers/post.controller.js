@@ -28,7 +28,7 @@ export function getPosts(req, res) {
  */
 export function addPost(req, res) {
   if (!req.body.post.name || !req.body.post.title || !req.body.post.content) {
-    return res.status(403).json({
+    return res.status(400).json({
       error: 'Required fields: author, title, content',
     });
   }
@@ -107,7 +107,7 @@ export const likePost = (req, res) => {
   const { postId, userId } = req.body;
 
   if (!postId || !userId) {
-    return res.status(403).json({
+    return res.status(400).json({
       error: 'Required fields: postId, userId',
     });
   }
@@ -133,7 +133,7 @@ export const unlikePost = (req, res) => {
   const { postId, userId } = req.body;
 
   if (!postId || !userId) {
-    return res.status(403).json({
+    return res.status(400).json({
       error: 'Required fields: postId, userId',
     });
   }
