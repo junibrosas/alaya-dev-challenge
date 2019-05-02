@@ -11,14 +11,20 @@ router.get('/:cuid', PostController.getPost);
 // Add a new Post
 router.post('/', PostController.addPost);
 
+// Delete a post by cuid
+router.delete('/:cuid', PostController.deletePost);
+
 // Like a post
 router.post('/like', PostController.likePost);
 
 // Unlike a post
 router.post('/unlike', PostController.unlikePost);
 
-// Delete a post by cuid
-router.delete('/:cuid', PostController.deletePost);
+// Add new post comment
+router.post('/comment', PostController.addComment);
+
+// Get all post comments
+router.get('/comment/:postId', PostController.getPostComments);
 
 export { router as PostRoutes };
 

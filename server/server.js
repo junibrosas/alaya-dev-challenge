@@ -54,7 +54,6 @@ import Helmet from 'react-helmet';
 import routes from '../client/routes';
 import { fetchComponentData } from './util/fetchData';
 import { PostRoutes } from './routes/post.routes';
-import { CommentRoutes } from './routes/comment.routes';
 import dummyData from './dummyData';
 import serverConfig from './config';
 
@@ -82,7 +81,6 @@ app.use(Express.static(path.resolve(__dirname, '../dist/client')));
 app.use(cookieParser());
 
 app.use('/api/posts', PostRoutes);
-app.use('/api/comment', CommentRoutes);
 
 // Render Initial HTML
 const renderFullPage = (html, initialState) => {

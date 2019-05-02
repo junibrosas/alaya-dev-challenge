@@ -45,7 +45,7 @@ export function setGuiLoadingComment(isLoading) {
 }
 
 /**
- * API Action Thunks
+ * Post Action Thunks
  */
 
 export function fetchPosts() {
@@ -59,13 +59,6 @@ export function fetchPosts() {
 export function fetchPost(cuid) {
   return (dispatch) => {
     return callApi(`posts/${cuid}`).then(res => dispatch(addPost(res.post)));
-  };
-}
-
-export function fetchPostComments(postId) {
-  return (dispatch) => {
-    return callApi(`comment/${postId}`, 'get')
-      .then((res) => dispatch(setComments(res.comments)));
   };
 }
 
@@ -85,12 +78,31 @@ export function addPostRequest(post, router) {
   };
 }
 
+export function deletePostRequest(cuid) {
+  return (dispatch) => {
+    return callApi(`posts/${cuid}`, 'delete')
+      .then(() => dispatch(deletePost(cuid)));
+  };
+}
+
+
+/**
+ * Comment Action Thunks
+ */
+
+export function fetchPostComments(postId) {
+  return (dispatch) => {
+    return callApi(`posts/comment/${postId}`, 'get')
+      .then((res) => dispatch(setComments(res.comments)));
+  };
+}
+
 export function addCommentRequest(comment) {
   const { author, content, postId } = comment;
 
   return (dispatch) => {
     dispatch(setGuiLoadingComment(true));
-    return callApi('comment', 'post', {
+    return callApi('posts/comment', 'post', {
       comment: {
         postId,
         author,
@@ -102,6 +114,10 @@ export function addCommentRequest(comment) {
       });
   };
 }
+
+/**
+ * Like Action Thunks
+ */
 
 export function likePost(postId) {
   const userId = Cookies.get('userId');
@@ -127,9 +143,3 @@ export function unLikePost(postId) {
   };
 }
 
-export function deletePostRequest(cuid) {
-  return (dispatch) => {
-    return callApi(`posts/${cuid}`, 'delete')
-      .then(() => dispatch(deletePost(cuid)));
-  };
-}
