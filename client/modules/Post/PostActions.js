@@ -1,5 +1,6 @@
 import callApi from '../../util/apiCaller';
 import { toggleAddPost } from '../App/AppActions';
+import Cookies from 'js-cookie';
 
 export const SET_POST = 'SET_POST';
 export const ADD_POST = 'ADD_POST';
@@ -103,8 +104,10 @@ export function addCommentRequest(comment) {
 }
 
 export function likePost(postId) {
+  const userId = Cookies.get('userId');
+
   return (dispatch) => {
-    return callApi('posts/like', 'post', { postId })
+    return callApi('posts/like', 'post', { postId, userId })
       .then(res => {
         const post = res.result;
         dispatch(addPost(post));
@@ -113,8 +116,10 @@ export function likePost(postId) {
 }
 
 export function unLikePost(postId) {
+  const userId = Cookies.get('userId');
+
   return (dispatch) => {
-    return callApi('posts/unlike', 'post', { postId })
+    return callApi('posts/unlike', 'post', { postId, userId })
       .then(res => {
         const post = res.result;
         dispatch(addPost(post));

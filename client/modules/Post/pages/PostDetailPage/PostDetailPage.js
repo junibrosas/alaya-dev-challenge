@@ -20,7 +20,7 @@ export class PostDetailPage extends React.Component {
 
     const { post } = props;
     const userId = Cookies.get('userId');
-    const result = post.likes.find((like) => like.userId === userId && like.postId === post.cuid);
+    const result = post.likes.find((like) => like === userId);
 
     this.state = {
       isPostLiked: !!result,
@@ -100,7 +100,6 @@ function mapStateToProps(state, props) {
 PostDetailPage.propTypes = {
   gui: PropTypes.shape({
     isLoadingComment: PropTypes.bool.isRequired,
-    isPostLiked: PropTypes.bool.isRequired,
   }),
   comments: PropTypes.arrayOf(PropTypes.shape({
     author: PropTypes.string.isRequired,

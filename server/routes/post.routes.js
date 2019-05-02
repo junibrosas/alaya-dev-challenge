@@ -1,6 +1,5 @@
 import { Router } from 'express';
 import * as PostController from '../controllers/post.controller';
-import * as LikeController from '../controllers/like.controller';
 const router = new Router();
 
 // Get all Posts
@@ -13,10 +12,10 @@ router.get('/:cuid', PostController.getPost);
 router.post('/', PostController.addPost);
 
 // Like a post
-router.post('/like', LikeController.likePost);
+router.post('/like', PostController.likePost);
 
 // Unlike a post
-router.post('/unlike', LikeController.unlikePost);
+router.post('/unlike', PostController.unlikePost);
 
 // Delete a post by cuid
 router.delete('/:cuid', PostController.deletePost);

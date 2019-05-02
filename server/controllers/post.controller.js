@@ -65,7 +65,6 @@ export function addPost(req, res) {
  */
 export function getPost(req, res) {
   PostModel.findOne({ cuid: req.params.cuid })
-    .populate('likes')
     .exec((err, post) => {
       if (err) {
         return res.status(400).json({
@@ -106,3 +105,36 @@ export function deletePost(req, res) {
     return res;
   });
 }
+
+
+/**
+ * Create like & push like to post
+ */
+export const likePost = (req, res) => {
+  PostModel.findOneAndUpdate({ cuid: req.body.postId }, { $push: { likes: req.body.userId } }, { new: true })
+  .exec((err, result) => {
+    if (err) {
+      return res.status(400).json({
+        error: getErrorMessage(err),
+      });
+    }
+
+    return res.json({ result });
+  });
+};
+
+/**
+ * Remove like & pull like from post
+ */
+export const unlikePost = (req, res) => {
+  PostModel.findOneAndUpdate({ cuid: req.body.postId }, { $pull: { likes: req.body.userId } }, { new: true })
+  .exec((err, result) => {
+    if (err) {
+      return res.status(400).json({
+        error: getErrorMessage(err),
+      });
+    }
+
+    return res.json({ result });
+  });
+};
